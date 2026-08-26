@@ -1,0 +1,156 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Kantumruy Pro', 'Segoe UI', system-ui, Roboto, sans-serif;
+
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #d9e6ff;
+  --color-brand-500: #2f6fed;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+
+  --color-navy-900: #0e1526;
+  --color-navy-800: #141c31;
+  --color-navy-700: #1b243d;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f3f5f9;
+  color: #1f2430;
+}
+
+/* Scrollable but scrollbar-less — used on the Table component's internal
+   scroll region so the toolbar/pagination shell reads as a fixed panel
+   with no visible scroll chrome, while wheel/touch/keyboard scrolling
+   still works normally. */
+.custom-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, modern Edge */
+}
+
+/* Branded loading animation — a dumbbell "rep": tilts and lifts like it's
+   being curled, with a soft expanding ring pulsing behind it. Used by
+   LoadingScreen / LoadingBlock instead of a plain spinner or "Loading…"
+   text. */
+@keyframes lift-rep {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-12deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(12deg);
+  }
+}
+.animate-lift-rep {
+  animation: lift-rep 1.1s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  75%,
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Soft entrance for whatever replaces a loading state — applied to both
+   the loading indicator itself and the content that follows it, so the
+   swap reads as a crossfade rather than a hard flash. Opacity-only (no
+   transform) so it's safe to use on table rows too. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out both;
+}
+
+/* Indeterminate sweep for the top-of-page loading bar — a short segment
+   races from off-screen left to off-screen right in one continuous motion,
+   looping seamlessly (no pause-then-snap) for as long as the app-wide
+   LoadingBarContext reports something is still fetching. */
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+.animate-loading-bar {
+  animation: loading-bar 1.1s linear infinite;
+}
+
+/* Modal entrance — the panel pops in with a soft scale + fade instead of
+   just snapping into existence, so opening any dialog feels like part of
+   the same "everything responds smoothly" polish as the button press
+   animations. The backdrop just fades (reuses .animate-fade-in above). */
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.animate-modal-pop {
+  animation: modal-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Reverse of modal-pop — for RowActionsMenu, which (unlike a modal you
+   dismiss and forget) plays a real exit transition before unmounting rather
+   than vanishing instantly, so it reads as one continuous open/close motion
+   like a native context menu. */
+@keyframes menu-pop-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(4px);
+  }
+}
+.animate-menu-pop-out {
+  animation: menu-pop-out 0.15s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+/* Toast entrance — slides down/in and fades, for the success/error
+   notifications raised after saves, deletes, and other actions. */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-toast-in {
+  animation: toast-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
