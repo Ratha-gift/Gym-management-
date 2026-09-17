@@ -44,7 +44,7 @@ export default function UserMenu({ variant = 'sidebar' }: UserMenuProps) {
         trigger={
           isCompact ? (
             <span
-              className={`block rounded-full transition hover:ring-2 hover:ring-white/20 ${isTopbar ? 'hover:ring-gray-200' : ''}`}
+              className={`block rounded-full transition hover:ring-2 hover:ring-white/20 ${isTopbar ? 'hover:ring-gray-200 dark:hover:ring-white/10' : ''}`}
               aria-label={t('userMenu.editProfile')}
             >
               <Avatar name={user?.name ?? '—'} photo={user?.photo} size={38} />
@@ -65,5 +65,6 @@ export default function UserMenu({ variant = 'sidebar' }: UserMenuProps) {
 
       <EditProfileModal open={editOpen} onClose={() => setEditOpen(false)} />
     </>
+    
   )
 }

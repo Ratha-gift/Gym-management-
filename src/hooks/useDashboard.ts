@@ -2,11 +2,33 @@ import { useCallback, useEffect, useState } from 'react'
 import { api, ApiError } from '@/lib/api'
 import type { Member } from '@/types/member'
 
+interface MonthlySignup {
+  month: string
+  count: number
+}
+
+interface QuickStartProgress {
+  member: boolean
+  package: boolean
+  payment: boolean
+  attendance: boolean
+}
+
 interface DashboardStats {
+  quick_start: QuickStartProgress
   total_members: number
+  total_revenue: number
+  revenue_this_month: number
+  payments_this_month: number
+  payments_count: number
   active_members: number
+  frozen_members: number
   expired_members: number
+  terminated_members: number
   packages: number
+  new_members_this_month: number
+  members_before_this_month: number
+  monthly_signups: MonthlySignup[]
 }
 
 interface DashboardData {

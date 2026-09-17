@@ -73,7 +73,7 @@ export default function PackagesPage() {
 
   return (
     <div className="space-y-6">
-      {error && <Card className="border-red-100 bg-red-50 p-4 text-sm text-red-600">{error}</Card>}
+      {error && <Card className="border-red-100 bg-red-50 p-4 text-sm text-red-600 dark:border-red-500/20 dark:bg-red-500/10">{error}</Card>}
 
       <div className="flex items-center justify-end">
         <Button onClick={openCreate}>
@@ -85,20 +85,20 @@ export default function PackagesPage() {
       {isLoading ? (
         <LoadingBlock message={t('packages.loadingPackages')} />
       ) : packages.length === 0 ? (
-        <Card className="animate-fade-in p-10 text-center text-sm text-gray-400">{t('packages.noPackagesYet')}</Card>
+        <Card className="animate-fade-in p-10 text-center text-sm text-gray-400 dark:text-gray-500">{t('packages.noPackagesYet')}</Card>
       ) : (
         <div className="grid animate-fade-in grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {packages.map((pkg) => (
             <Card key={pkg.package_id} className="flex flex-col gap-3 p-5">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="font-bold text-gray-900">{pkg.package_name}</p>
-                  <p className="text-sm text-gray-400">{formatDuration(pkg)}</p>
+                  <p className="font-bold text-gray-900 dark:text-gray-100">{pkg.package_name}</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">{formatDuration(pkg)}</p>
                 </div>
                 <Badge status={pkg.status === 'active' ? 'active' : 'terminated'} />
               </div>
               <p className="text-2xl font-bold text-brand-600">${Number(pkg.price).toFixed(2)}</p>
-              {pkg.description && <p className="text-sm text-gray-500">{pkg.description}</p>}
+              {pkg.description && <p className="text-sm text-gray-500 dark:text-gray-400">{pkg.description}</p>}
               <div className="mt-auto flex justify-end gap-2 pt-2">
                 <IconButton
                   icon={<Pencil className="h-4 w-4" />}

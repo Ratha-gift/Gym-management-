@@ -41,7 +41,7 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-[#f3f5f9]">
+    <div className="h-screen overflow-hidden bg-[#f3f5f9] transition-colors dark:bg-navy-900">
       <TopLoadingBar />
       <Sidebar open={sidebarOpen} onNavigate={() => setSidebarOpen(false)} collapsed={collapsed} />
 
@@ -58,12 +58,15 @@ export default function DashboardLayout() {
         <Topbar
           title={t(titleKey)}
           subtitle={subtitle}
-          notificationCount={3}
           onMenuClick={() => setSidebarOpen((prev) => !prev)}
           collapsed={collapsed}
           onToggleCollapse={toggleCollapsed}
         />
-        <main className="flex-1 overflow-y-auto bg-[#f3f5f9] p-1.5 sm:p-2">
+        {/* No padding below `sm` — on a phone screen every pixel of width
+            matters, so the content goes edge-to-edge there instead of
+            keeping the small ERP-style gray gutter that's intentional on
+            larger screens (tablet/desktop) where space isn't as tight. */}
+        <main className="flex-1 overflow-y-auto bg-[#f3f5f9] p-0 transition-colors sm:p-2 dark:bg-navy-900">
           <Outlet />
         </main>
       </div>

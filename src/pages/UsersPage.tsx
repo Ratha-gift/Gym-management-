@@ -81,7 +81,7 @@ export default function UsersPage() {
       render: (user) => (
         <div className="flex min-w-0 items-center gap-3">
           <Avatar name={user.name} photo={user.photo} size={34} />
-          <span className="truncate font-medium text-gray-800" title={user.name}>
+          <span className="truncate font-medium text-gray-800 dark:text-gray-200" title={user.name}>
             {user.name}
           </span>
         </div>
@@ -90,7 +90,7 @@ export default function UsersPage() {
     {
       header: t('common.email'),
       width: 200,
-      render: (user) => <span className="truncate text-gray-600">{user.email}</span>,
+      render: (user) => <span className="truncate text-gray-600 dark:text-gray-400">{user.email}</span>,
     },
     {
       header: t('common.phone'),
@@ -100,7 +100,7 @@ export default function UsersPage() {
     {
       header: t('users.role'),
       width: 150,
-      render: (user) => <span className="text-gray-600">{user.role?.role_name ?? '—'}</span>,
+      render: (user) => <span className="text-gray-600 dark:text-gray-400">{user.role?.role_name ?? '—'}</span>,
     },
     {
       header: t('common.status'),
@@ -130,7 +130,7 @@ export default function UsersPage() {
 
   return (
     <div className="flex h-full flex-col gap-6">
-      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600">{error}</Card>}
+      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600 dark:border-red-500/20 dark:bg-red-500/10">{error}</Card>}
 
       <ListPageTemplate
         fillContent

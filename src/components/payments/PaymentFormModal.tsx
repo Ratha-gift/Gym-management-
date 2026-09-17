@@ -4,6 +4,7 @@ import Modal from '@/components/ui/Modal'
 import Field from '@/components/ui/Field'
 import Input from '@/components/ui/Input'
 import Select from '@/components/ui/Select'
+import SearchableSelect from '@/components/ui/SearchableSelect'
 import Button from '@/components/ui/Button'
 import { api, ApiError } from '@/lib/api'
 import { useToast } from '@/context/ToastContext'
@@ -21,6 +22,7 @@ export default function PaymentFormModal({ open, onClose, onSaved }: PaymentForm
   const { t } = useTranslation()
   const toast = useToast()
   const [members, setMembers] = useState<Member[]>([])
+  const [isLoadingMembers, setIsLoadingMembers] = useState(false)
   const [memberId, setMemberId] = useState('')
   const [amount, setAmount] = useState('')
   const [discount, setDiscount] = useState('0')
@@ -37,8 +39,21 @@ export default function PaymentFormModal({ open, onClose, onSaved }: PaymentForm
     setDiscount('0')
     setMethod('Cash')
     setReferenceNo('')
-    api.get<Paginated<Member>>('/members?per_page=500').then((res) => setMembers(res.data))
+    setIsLoadingMembers(true)
+    api
+      .get<Paginated<Member>>('/members?per_page=500')
+      .then((res) => setMembers(res.data))
+      .finally(() => setIsLoadingMembers(false))
   }, [open])
+
+  function handleMemberChange(id: string) {
+    setMemberId(id)
+    const member = members.find((m) => String(m.member_id) === id)
+    const price = member?.active_membership?.package?.price
+    if (price !== undefined && price !== null) {
+      setAmount(String(Number(price)))
+    }
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
@@ -68,17 +83,16 @@ export default function PaymentFormModal({ open, onClose, onSaved }: PaymentForm
   return (
     <Modal open={open} onClose={onClose} title={t('payments.recordPayment')}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10">{error}</p>}
 
         <Field label={t('membership.member')}>
-          <Select value={memberId} onChange={(e) => setMemberId(e.target.value)} required>
-            <option value="">{t('membership.selectMember')}</option>
-            {members.map((m) => (
-              <option key={m.member_id} value={m.member_id}>
-                {m.member_code} — {m.name}
-              </option>
-            ))}
-          </Select>
+          <SearchableSelect
+            value={memberId}
+            onChange={(e) => handleMemberChange(e.target.value)}
+            placeholder={t('membership.selectMember')}
+            loading={isLoadingMembers}
+            options={members.map((m) => ({ value: String(m.member_id), label: `${m.member_code} — ${m.name}` }))}
+          />
         </Field>
 
         <div className="grid grid-cols-2 gap-4">
@@ -89,7 +103,6 @@ export default function PaymentFormModal({ open, onClose, onSaved }: PaymentForm
             <Input type="number" min={0} step="0.01" value={discount} onChange={(e) => setDiscount(e.target.value)} />
           </Field>
         </div>
-
         <Field label={t('payments.method')}>
           <Select value={method} onChange={(e) => setMethod(e.target.value as PaymentMethod)}>
             <option value="Cash">{t('common.cash')}</option>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
-import { Camera, X } from 'lucide-react'
+import { Camera, Eye, EyeOff, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import Modal from '@/components/ui/Modal'
 import Field from '@/components/ui/Field'
@@ -48,6 +48,8 @@ export default function UserFormModal({ open, user, roles, onClose, onSaved }: U
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [values, setValues] = useState<UserFormValues>(EMPTY)
   const [photo, setPhoto] = useState<string | null>(null)
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -68,6 +70,8 @@ export default function UserFormModal({ open, user, roles, onClose, onSaved }: U
           }
         : EMPTY,
     )
+    setPasswordConfirmation('')
+    setShowPassword(false)
   }, [open, user])
 
   function set<K extends keyof UserFormValues>(key: K, value: UserFormValues[K]) {
@@ -96,6 +100,14 @@ export default function UserFormModal({ open, user, roles, onClose, onSaved }: U
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
+
+    if (values.password || passwordConfirmation) {
+      if (values.password !== passwordConfirmation) {
+        setError('Passwords do not match.')
+        return
+      }
+    }
+
     setIsSubmitting(true)
     setError(null)
 
@@ -130,7 +142,7 @@ export default function UserFormModal({ open, user, roles, onClose, onSaved }: U
   return (
     <Modal open={open} onClose={onClose} title={user ? t('users.editUser') : t('users.addUser')}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10">{error}</p>}
 
         <div className="flex items-center gap-4">
           <div className="relative">
@@ -158,7 +170,7 @@ export default function UserFormModal({ open, user, roles, onClose, onSaved }: U
               <button
                 type="button"
                 onClick={() => setPhoto(null)}
-                className="ml-3 inline-flex items-center gap-1 text-sm text-gray-400 transition hover:text-red-500 active:scale-95"
+                className="ml-3 inline-flex items-center gap-1 text-sm text-gray-400 transition hover:text-red-500 active:scale-95 dark:text-gray-500"
               >
                 <X className="h-3.5 w-3.5" />
                 {t('profile.removePhoto')}
@@ -184,16 +196,37 @@ export default function UserFormModal({ open, user, roles, onClose, onSaved }: U
           <Input value={values.phone} onChange={(e) => set('phone', e.target.value)} />
         </Field>
 
-        <Field label={user ? t('users.newPasswordOptional') : t('password.new')}>
-          <Input
-            type="password"
-            value={values.password}
-            onChange={(e) => set('password', e.target.value)}
-            autoComplete="new-password"
-            required={!user}
-            placeholder={user ? t('users.leaveBlankToKeep') : undefined}
-          />
-        </Field>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Field label={user ? t('users.newPasswordOptional') : t('password.new')}>
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              value={values.password}
+              onChange={(e) => set('password', e.target.value)}
+              autoComplete="new-password"
+              required={!user}
+              placeholder={user ? t('users.leaveBlankToKeep') : undefined}
+              endAdornment={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="text-gray-400 transition hover:text-gray-600 active:scale-90 dark:text-gray-500 dark:hover:text-gray-300"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              }
+            />
+          </Field>
+          <Field label={t('password.confirm')}>
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              autoComplete="new-password"
+              required={!user}
+            />
+          </Field>
+        </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label={t('users.role')}>

@@ -67,6 +67,7 @@ export default function MemberFormModal({ open, member, onClose, onSaved }: Memb
 
   function set<K extends keyof MemberFormValues>(key: K, value: MemberFormValues[K]) {
     setValues((prev) => ({ ...prev, [key]: value }))
+  
   }
 
   async function handleSubmit(event: FormEvent) {
@@ -101,7 +102,7 @@ export default function MemberFormModal({ open, member, onClose, onSaved }: Memb
   return (
     <Modal open={open} onClose={onClose} title={member ? t('members.editMember') : t('members.addMember')} size="lg">
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10">{error}</p>}
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label={t('members.firstName')}>

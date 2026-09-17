@@ -90,7 +90,7 @@ export default function MembersPage() {
 
   return (
     <div className="flex h-full flex-col gap-6">
-      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600">{error}</Card>}
+      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600 dark:border-red-500/20 dark:bg-red-500/10">{error}</Card>}
 
       <ListPageTemplate
         fillContent

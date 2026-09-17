@@ -54,7 +54,7 @@ export default function RoleFormModal({ open, role, onClose, onSaved }: RoleForm
   return (
     <Modal open={open} onClose={onClose} title={role ? t('roles.editRole') : t('roles.addRole')} size="sm">
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10">{error}</p>}
 
         <Field label={t('roles.roleName')}>
           <Input value={roleName} onChange={(e) => setRoleName(e.target.value)} required />

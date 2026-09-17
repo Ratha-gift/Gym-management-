@@ -60,7 +60,7 @@ export default function RecentMembersTable({
       render: (member) => (
         <div className="flex min-w-0 items-center gap-3">
           <Avatar name={member.name} size={34} />
-          <span className="truncate font-medium text-gray-800" title={member.name}>
+          <span className="truncate font-medium text-gray-800 dark:text-gray-200" title={member.name}>
             {member.name}
           </span>
         </div>

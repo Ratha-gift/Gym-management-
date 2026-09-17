@@ -32,8 +32,8 @@ export default function StatCard({ icon: Icon, iconClassName, label, value, tren
           <Icon className="h-6 w-6" />
         </span>
         <div className="min-w-0">
-          <p className="text-sm text-gray-400">{label}</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500">{label}</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
         </div>
       </div>
       {trend && (

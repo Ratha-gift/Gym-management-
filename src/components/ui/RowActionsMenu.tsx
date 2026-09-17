@@ -50,8 +50,6 @@ export default function RowActionsMenu({ actions }: { actions: RowAction[] }) {
     setOpen(true)
   }
 
-  // Plays the exit animation before actually unmounting, instead of just
-  // vanishing instantly — mirrors how a native context menu closes.
   function requestClose() {
     setClosing(true)
     setTimeout(() => {
@@ -65,10 +63,7 @@ export default function RowActionsMenu({ actions }: { actions: RowAction[] }) {
 
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node
-      // The menu panel is portalled to <body>, outside the trigger's own DOM
-      // subtree — without also checking it here, a mousedown on any menu
-      // item would count as "outside" and unmount the panel before the
-      // item's own click handler ever gets to fire.
+
       if (triggerRef.current?.contains(target)) return
       if (menuRef.current?.contains(target)) return
       requestClose()
@@ -76,8 +71,6 @@ export default function RowActionsMenu({ actions }: { actions: RowAction[] }) {
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') requestClose()
     }
-    // Capture phase — the Table's internal scroll container doesn't bubble
-    // scroll events, so this is the only reliable way to catch it closing.
     function handleScroll() {
       requestClose()
     }
@@ -100,7 +93,9 @@ export default function RowActionsMenu({ actions }: { actions: RowAction[] }) {
         type="button"
         onClick={() => (open ? requestClose() : openMenu())}
         className={`flex h-8 w-8 items-center justify-center rounded-full transition outline-none active:scale-90 focus-visible:ring-2 focus-visible:ring-brand-500/40 ${
-          open && !closing ? 'bg-brand-50 text-brand-600' : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'
+          open && !closing
+            ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400'
+            : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-white/5 dark:hover:text-gray-300'
         }`}
         aria-label={t('common.action')}
         aria-haspopup="menu"
@@ -115,7 +110,7 @@ export default function RowActionsMenu({ actions }: { actions: RowAction[] }) {
           <div
             ref={menuRef}
             role="menu"
-            className={`fixed z-50 w-44 overflow-hidden rounded-xl border cursor-pointer border-gray-100 bg-white py-1.5 shadow-xl ${
+            className={`fixed z-50 w-44 overflow-hidden rounded-xl border cursor-pointer border-gray-100 bg-white py-1.5 shadow-xl dark:border-navy-700 dark:bg-navy-800 ${
               closing ? 'animate-menu-pop-out' : 'animate-modal-pop'
             }`}
             style={{
@@ -136,8 +131,8 @@ export default function RowActionsMenu({ actions }: { actions: RowAction[] }) {
                   requestClose()
                   action.onClick?.()
                 }}
-                className={`group flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm outline-none transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100 focus-visible:bg-gray-100 ${
-                  action.danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-50'
+                className={`group flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-sm outline-none transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100 focus-visible:bg-gray-100 dark:focus-visible:bg-white/5 ${
+                  action.danger ? 'text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10' : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/5'
                 }`}
               >
                 <span className="inline-flex transition-transform duration-200 group-hover:translate-x-0.5 group-hover:scale-110">

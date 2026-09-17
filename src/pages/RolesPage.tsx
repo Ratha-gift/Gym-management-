@@ -154,12 +154,12 @@ export default function RolesPage() {
 
   return (
     <div className="flex h-full flex-col gap-6">
-      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600">{error}</Card>}
+      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600 dark:border-red-500/20 dark:bg-red-500/10">{error}</Card>}
 
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-[320px_1fr]">
         <Card className="flex min-h-0 flex-col p-5 sm:p-6">
           <div className="mb-4 flex shrink-0 items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-900">{t('roles.title')}</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('roles.title')}</h2>
             <Button
               onClick={() => {
                 setEditingRole(null)
@@ -185,14 +185,14 @@ export default function RolesPage() {
                   onClick={() => setSelectedRoleId(role.role_id)}
                   className={`group flex w-full items-start justify-between gap-2 rounded-lg border px-3 py-2.5 text-left transition active:scale-[0.98] ${
                     selectedRoleId === role.role_id
-                      ? 'border-brand-200 bg-brand-50'
-                      : 'border-transparent hover:bg-gray-50'
+                      ? 'border-brand-200 bg-brand-50 dark:border-brand-500/30 dark:bg-brand-500/10'
+                      : 'border-transparent hover:bg-gray-50 dark:hover:bg-white/5'
                   }`}
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-gray-800">{role.role_name}</p>
-                    {role.description && <p className="truncate text-xs text-gray-400">{role.description}</p>}
-                    <p className="mt-1 flex items-center gap-1 text-xs text-gray-400">
+                    <p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-200">{role.role_name}</p>
+                    {role.description && <p className="truncate text-xs text-gray-400 dark:text-gray-500">{role.description}</p>}
+                    <p className="mt-1 flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
                       <Users className="h-3 w-3" />
                       {t('roles.usersCount', { count: role.users_count ?? 0 })}
                     </p>
@@ -231,7 +231,7 @@ export default function RolesPage() {
           ) : (
             <>
               <div className="mb-4 flex shrink-0 flex-wrap items-center justify-between gap-3">
-                <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900">
+                <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-gray-100">
                   <ShieldCheck className="h-5 w-5 text-brand-600" />
                   {t('roles.permissionsFor', { name: selectedRole.role_name })}
                 </h2>
@@ -262,21 +262,21 @@ export default function RolesPage() {
                   <div className="space-y-5">
                     {grouped.map(([module, items]) => (
                       <div key={module}>
-                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">{module}</p>
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">{module}</p>
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                           {items.map((permission) => (
                             <div
                               key={permission.permission_id}
-                              className="group flex items-center justify-between gap-2 rounded-lg border border-gray-100 px-3 py-2.5"
+                              className="group flex items-center justify-between gap-2 rounded-lg border border-gray-100 px-3 py-2.5 dark:border-navy-700"
                             >
                               <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5">
                                 <input
                                   type="checkbox"
                                   checked={checkedIds.has(permission.permission_id)}
                                   onChange={() => togglePermission(permission.permission_id)}
-                                  className="h-4 w-4 shrink-0 rounded border-gray-300 text-brand-600 focus:ring-brand-500/40"
+                                  className="h-4 w-4 shrink-0 rounded border-gray-300 text-brand-600 focus:ring-brand-500/40 dark:border-navy-700 dark:bg-navy-900"
                                 />
-                                <span className="truncate text-sm text-gray-700">{permission.permission_name}</span>
+                                <span className="truncate text-sm text-gray-700 dark:text-gray-300">{permission.permission_name}</span>
                               </label>
                               <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                                 <IconButton

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Read(//f/Project_School_year3/semester2/react-js/ass/backend-Gym/**)",
+      "Bash(php artisan tinker '--execute= *)",
+      "Bash(npm uninstall *)"
+    ]
+  }
+}

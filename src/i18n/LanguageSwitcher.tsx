@@ -21,7 +21,7 @@ export default function LanguageSwitcher({ variant = 'light' }: LanguageSwitcher
   const isDark = variant === 'dark'
 
   return (
-    <div className={`inline-flex items-center gap-0.5 rounded-lg p-0.5 ${isDark ? 'bg-white/5' : 'bg-gray-100'}`}>
+    <div className={`inline-flex items-center gap-0.5 rounded-lg p-0.5 ${isDark ? 'bg-white/5' : 'bg-gray-100 dark:bg-white/5'}`}>
       {LANGUAGES.map(({ code, label }) => {
         const isActive = i18n.language === code
         return (
@@ -34,7 +34,7 @@ export default function LanguageSwitcher({ variant = 'light' }: LanguageSwitcher
                 ? 'bg-brand-600 text-white shadow-sm'
                 : isDark
                   ? 'text-gray-400 hover:text-white'
-                  : 'text-gray-500 hover:text-gray-800'
+                  : 'text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
             {label}

@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* Class-based dark mode — toggled by ThemeContext adding/removing `.dark` on
+   <html>, rather than only following the OS's prefers-color-scheme. Lets
+   `dark:` utilities work anywhere `.dark` is an ancestor. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'Kantumruy Pro', 'Segoe UI', system-ui, Roboto, sans-serif;
 
@@ -24,6 +29,83 @@ body {
   margin: 0;
   background: #f3f5f9;
   color: #1f2430;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dark body {
+  background: var(--color-navy-900);
+  color: #e5e9f0;
+}
+
+/* Print just one element (a payment receipt, say) instead of the whole app
+   behind it — hide everything, then re-reveal only the marked node. A
+   descendant's `visibility: visible` overrides an ancestor's `hidden`, so
+   this works even with .print-receipt nested inside Modal.tsx — its
+   wrappers switch to `print:contents` (see Modal.tsx) so they impose no
+   size/position constraints and this can just flow normally on the page. */
+@media print {
+  /* Match a standard 80mm thermal receipt roll. Without an explicit @page
+     size, the browser assumes Letter/A4 and the driver then stretches our
+     narrow receipt to fill that much bigger canvas — that's what blew every
+     line up to a giant, half-cut-off size and spilled it across 4 separate
+     "sheets" on an actual thermal printer. `auto` height keeps the roll
+     printing continuously instead of being paginated at a fixed page length. */
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
+  /* #root (sidebar, topbar, whatever page is open) is a separate sibling of
+     the modal's own portal container under <body> — visibility:hidden alone
+     doesn't collapse its layout, so its full h-screen height still pushes
+     the (now-unwrapped) receipt content down by a whole screen's worth of
+     blank space. display:none actually removes it from flow. */
+  #root {
+    display: none !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-receipt,
+  .print-receipt * {
+    visibility: visible;
+  }
+  .print-receipt {
+    margin: 0 auto;
+    padding: 3mm 0;
+    width: 72mm;
+    max-width: 72mm;
+    background: #fff !important;
+  }
+  /* Dark mode's `dark:text-*` utilities stay active during print (nothing
+     removes the `.dark` class from <html> just because we're printing), so
+     force plain, legible ink regardless of which theme was on-screen.
+     Also collapses the modal's screen-scale text-sm/base/lg/bold sizes down
+     to one small, uniform scale — at 72mm wide those on-screen sizes read
+     as huge, oversized lines on the receipt strip — and darkens border
+     colors, since thermal printers are monochrome and a subtle gray-200
+     divider barely shows up at all on the actual paper. */
+  .print-receipt * {
+    color: #1f2430 !important;
+    background: transparent !important;
+    border-color: #1f2430 !important;
+    font-size: 11px !important;
+    line-height: 1.5 !important;
+  }
+  body {
+    background: #fff !important;
+  }
+}
+
+/* Browsers don't actually give <button> a pointer cursor by default (it's
+   "default"/arrow unless styled) — apply it globally so every button, menu
+   item, tab, and option across the app reads as clickable on hover. Scoped
+   to :not(:disabled) so disabled buttons keep their own
+   disabled:cursor-not-allowed styling. */
+button:not(:disabled),
+[role='menuitem']:not(:disabled),
+[role='option']:not(:disabled),
+[role='tab']:not(:disabled) {
+  cursor: pointer;
 }
 
 /* Scrollable but scrollbar-less — used on the Table component's internal

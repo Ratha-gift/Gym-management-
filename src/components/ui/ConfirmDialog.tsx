@@ -24,7 +24,7 @@ export default function ConfirmDialog({
   const { t } = useTranslation()
   return (
     <Modal open={open} onClose={onCancel} title={title} size="sm">
-      <p className="text-sm text-gray-500">{message}</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400">{message}</p>
       <div className="mt-6 flex justify-end gap-3">
         <Button variant="outline" onClick={onCancel} disabled={isLoading}>
           {t('common.cancel')}

@@ -17,20 +17,13 @@ interface TableProps<T> {
   data: T[]
   columns: Column<T>[]
   height?: string
-  /**
-   * When true, sizes to 100% of the parent instead of calc(100vh - height)
-   * — for pages that already put this Table inside their own flex-1 /
-   * overflow-y-auto scroll region.
-   */
+
   fillParent?: boolean
-  /**
-   * When true, skips the fixed-height scroll container entirely and lets
-   * the table grow to its natural content height — for short, paginated
-   * lists embedded in a Card rather than a full-page data grid.
-   */
   autoHeight?: boolean
   loading?: boolean
   loadingComponent?: ReactNode
+
+  
   emptyMessage?: string
 
   // Expandable rows
@@ -151,13 +144,19 @@ const Table = <T extends Record<string, any>>({
   }
 
   return (
-    <div
-      className={`custom-scrollbar relative mx-auto rounded-lg bg-white text-sm ${autoHeight ? 'overflow-x-auto' : 'overflow-auto'}`}
-      style={autoHeight ? undefined : { height: fillParent ? '100%' : `calc(100vh - ${height})` }}
-      ref={tableRef}
-    >
-      <div className="h-full w-full">
-        <table className={`w-full table-fixed border-collapse ${loading || !hasData ? 'h-full' : ''}`}>
+    <>
+      {/* Desktop: fixed-height, internally-scrolling table — a real sibling
+          of the mobile card list below (not the same box with a
+          `hidden`/`sm:table` toggle on the <table> alone), since each
+          needs its own independent height + overflow rule and inline
+          styles can't be scoped to a breakpoint on a single shared box. */}
+      <div
+        className={`custom-scrollbar relative mx-auto hidden rounded-lg bg-white text-sm transition-colors sm:block dark:bg-navy-800 ${autoHeight ? 'sm:overflow-x-auto' : 'sm:overflow-auto'}`}
+        style={autoHeight ? undefined : { height: fillParent ? '100%' : `calc(100vh - ${height})` }}
+        ref={tableRef}
+      >
+        <div className="h-full w-full">
+          <table className={`w-full table-fixed border-collapse ${loading || !hasData ? 'h-full' : ''}`}>
           <thead>
             <tr>
               {columns.map((column, index) => {
@@ -212,7 +211,6 @@ const Table = <T extends Record<string, any>>({
                         </span>
                       )}
                     </div>
-
                     {showResizeHandle && (
                       <div
                         className={`absolute right-0 top-1/2 h-8 w-0.5 -translate-y-1/2 transform cursor-col-resize rounded transition-all duration-200 ${
@@ -230,7 +228,7 @@ const Table = <T extends Record<string, any>>({
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-navy-700">
             {loading ? (
               <tr className="h-full">
                 <td colSpan={columns.length} className="h-full p-3 text-center text-sm">
@@ -257,11 +255,11 @@ const Table = <T extends Record<string, any>>({
                   <React.Fragment key={rowId}>
                     <tr
                       className={`
-                        animate-fade-in text-gray-800 transition-all duration-150 ease-in-out
+                        animate-fade-in text-gray-800 transition-all duration-150 ease-in-out dark:text-gray-200
                         ${clickableRows ? 'cursor-pointer' : 'cursor-default'}
-                        ${clickableRows ? 'hover:bg-brand-50/70' : ''}
-                        ${isSelected ? 'border-l-4 border-l-brand-600 bg-brand-50' : ''}
-                        ${isExpanded ? 'border-l-4 border-l-gray-400 bg-gray-50' : ''}
+                        ${clickableRows ? 'hover:bg-brand-50/70 dark:hover:bg-brand-500/10' : ''}
+                        ${isSelected ? 'border-l-4 border-l-brand-600 bg-brand-50 dark:bg-brand-500/10' : ''}
+                        ${isExpanded ? 'border-l-4 border-l-gray-400 bg-gray-50 dark:border-l-gray-600 dark:bg-white/5' : ''}
                         ${rowClass}
                       `}
                       onClick={(e) => {
@@ -314,9 +312,9 @@ const Table = <T extends Record<string, any>>({
                     </tr>
 
                     {expandable && isExpanded && renderExpandContent && (
-                      <tr className="bg-gray-50/80">
+                      <tr className="bg-gray-50/80 dark:bg-white/5">
                         <td colSpan={columns.length} className="p-0">
-                          <div className="border-t border-gray-100 px-4 py-3">{renderExpandContent(row, rowIndex)}</div>
+                          <div className="border-t border-gray-100 px-4 py-3 dark:border-navy-700">{renderExpandContent(row, rowIndex)}</div>
                         </td>
                       </tr>
                     )}
@@ -326,8 +324,61 @@ const Table = <T extends Record<string, any>>({
             )}
           </tbody>
         </table>
+        </div>
       </div>
-    </div>
+
+      {/* Mobile card list — its own bounded scroll box, mirroring the
+          desktop table's height/overflow treatment exactly (same
+          fillParent/height math), so the list scrolls *within* this box —
+          pagination (a sibling below, outside Table entirely) stays fixed
+          in view the whole time, instead of either being clipped by an
+          ancestor's overflow-hidden or forcing the whole page to scroll
+          past every row just to reach it. A wide multi-column table
+          doesn't fit a phone screen anyway, so below `sm` each row becomes
+          its own stacked card instead, generically built from the same
+          `columns` every page already defines: the first column (always
+          the row's identity — an avatar+name combo across every page in
+          this app) becomes the card's header, the last column (always the
+          action button/menu) is pinned top-right, and everything in
+          between renders as "label: value" lines. */}
+      <div
+        className="custom-scrollbar overflow-y-auto rounded-lg bg-white transition-colors sm:hidden dark:bg-navy-800"
+        style={{ height: fillParent ? '100%' : `calc(100vh - ${height})` }}
+      >
+        <div className="divide-y divide-gray-100 dark:divide-navy-700">
+          {loading ? (
+            <div className="flex min-h-60 items-center justify-center p-6">{loadingComponent || <LoadingBlock />}</div>
+          ) : !hasData ? (
+            <div className="animate-fade-in flex min-h-60 items-center justify-center p-6">
+              <EmptyState message={emptyMessage} />
+            </div>
+          ) : (
+            tableData.map((row, rowIndex) => {
+              const rowId = getRowId(row, rowIndex)
+              const firstCol = columns[0]
+              const lastCol = columns[columns.length - 1]
+              const middleCols = columns.length > 2 ? columns.slice(1, -1) : []
+              const cell = (col: Column<T>) => (col.render ? col.render(row, rowIndex) : (row[col.accessor as keyof T] ?? ''))
+
+              return (
+                <div key={rowId} className="animate-fade-in flex items-start justify-between gap-3 p-4">
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <div className="text-sm font-medium text-gray-800 dark:text-gray-200">{cell(firstCol)}</div>
+                    {middleCols.map((col, i) => (
+                      <div key={i} className="flex items-center gap-1.5 text-xs">
+                        <span className="shrink-0 text-gray-400 dark:text-gray-500">{col.header}:</span>
+                        <span className="min-w-0 truncate text-gray-600 dark:text-gray-400">{cell(col)}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {columns.length > 1 && <div className="shrink-0">{cell(lastCol)}</div>}
+                </div>
+              )
+            })
+          )}
+        </div>
+      </div>
+    </>
   )
 }
 

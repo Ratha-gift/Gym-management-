@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Plus, Eye } from 'lucide-react'
+import { Plus, Eye, Printer } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
@@ -11,6 +11,7 @@ import Table, { type Column } from '@/components/ui/Table'
 import ListPageTemplate from '@/components/ui/ListPageTemplate'
 import PaymentFormModal from '@/components/payments/PaymentFormModal'
 import PaymentViewModal from '@/components/payments/PaymentViewModal'
+import QuickPrintReceipt from '@/components/payments/QuickPrintReceipt'
 import { usePageLoading } from '@/hooks/usePageLoading'
 import { api, ApiError } from '@/lib/api'
 import type { Payment, PaymentMethod } from '@/types/payment'
@@ -43,6 +44,7 @@ export default function PaymentsPage() {
 
   const [formOpen, setFormOpen] = useState(false)
   const [viewingPayment, setViewingPayment] = useState<Payment | null>(null)
+  const [printingPayment, setPrintingPayment] = useState<Payment | null>(null)
 
   function load() {
     setIsLoading(true)
@@ -65,6 +67,14 @@ export default function PaymentsPage() {
     setViewingPayment(full)
   }
 
+  /** Prints a row's receipt directly, without ever popping the View Receipt
+   * modal open on screen first — QuickPrintReceipt mounts the same
+   * `.print-receipt` markup invisibly and calls window.print() itself. */
+  async function printPayment(payment: Payment) {
+    const full = await api.get<Payment>(`/payments/${payment.payment_id}`)
+    setPrintingPayment(full)
+  }
+
   const columns: Column<Payment>[] = [
     {
       header: t('membership.member'),
@@ -72,7 +82,7 @@ export default function PaymentsPage() {
       render: (p) => (
         <div className="flex min-w-0 items-center gap-3">
           <Avatar name={p.member?.name ?? '—'} size={32} />
-          <span className="truncate font-medium text-gray-800" title={p.member?.name ?? `Member #${p.member_id}`}>
+          <span className="truncate font-medium text-gray-800 dark:text-gray-200" title={p.member?.name ?? `Member #${p.member_id}`}>
             {p.member?.name ?? `Member #${p.member_id}`}
           </span>
         </div>
@@ -81,17 +91,17 @@ export default function PaymentsPage() {
     {
       header: t('payments.date'),
       width: 140,
-      render: (p) => <span className="text-gray-500">{new Date(p.payment_date).toLocaleDateString()}</span>,
+      render: (p) => <span className="text-gray-500 dark:text-gray-400">{new Date(p.payment_date).toLocaleDateString()}</span>,
     },
     {
       header: t('payments.method'),
       width: 140,
-      render: (p) => <span className="text-gray-600">{t(METHOD_KEY[p.payment_method])}</span>,
+      render: (p) => <span className="text-gray-600 dark:text-gray-400">{t(METHOD_KEY[p.payment_method])}</span>,
     },
     {
       header: t('common.amount'),
       width: 120,
-      render: (p) => <span className="font-semibold text-gray-900">${Number(p.net_amount).toFixed(2)}</span>,
+      render: (p) => <span className="font-semibold text-gray-900 dark:text-gray-100">${Number(p.net_amount).toFixed(2)}</span>,
     },
     {
       header: t('common.status'),
@@ -100,16 +110,19 @@ export default function PaymentsPage() {
     },
     {
       header: t('common.action'),
-      width: 50,
+      width: 80,
       render: (p) => (
-        <IconButton icon={<Eye className="h-4 w-4" />} tone="brand" onClick={() => viewPayment(p)} aria-label={t('payments.viewReceipt')} />
+        <div className="flex items-center gap-1.5">
+          <IconButton icon={<Eye className="h-4 w-4" />} tone="brand" onClick={() => viewPayment(p)} aria-label={t('payments.viewReceipt')} />
+          <IconButton icon={<Printer className="h-4 w-4" />} tone="success" onClick={() => printPayment(p)} aria-label={t('payments.print')} title={t('payments.print')} />
+        </div>
       ),
     },
   ]
 
   return (
     <div className="flex h-full flex-col gap-6">
-      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600">{error}</Card>}
+      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600 dark:border-red-500/20 dark:bg-red-500/10">{error}</Card>}
 
       <ListPageTemplate
         fillContent
@@ -147,6 +160,7 @@ export default function PaymentsPage() {
       />
 
       <PaymentViewModal payment={viewingPayment} onClose={() => setViewingPayment(null)} />
+      <QuickPrintReceipt payment={printingPayment} onDone={() => setPrintingPayment(null)} />
     </div>
   )
 }

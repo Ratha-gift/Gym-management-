@@ -12,7 +12,7 @@ export default function LoadingBlock({ message }: { message?: string }) {
           <Dumbbell className="h-5 w-5 text-white animate-lift-rep" />
         </span>
       </div>
-      <p className="text-sm text-gray-400">{message ?? t('common.loading')}</p>
+      <p className="text-sm text-gray-400 dark:text-gray-500">{message ?? t('common.loading')}</p>
     </div>
   )
 }

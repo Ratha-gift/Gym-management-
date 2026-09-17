@@ -97,7 +97,7 @@ export default function PackageFormModal({ open, pkg, onClose, onSaved }: Packag
   return (
     <Modal open={open} onClose={onClose} title={pkg ? t('packages.editPackage') : t('packages.addPackage')}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10">{error}</p>}
 
         <Field label={t('packages.packageName')}>
           <Input value={values.package_name} onChange={(e) => set('package_name', e.target.value)} required />

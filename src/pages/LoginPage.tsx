@@ -31,7 +31,7 @@ export default function LoginPage() {
           <p className="max-w-55 text-sm text-gray-300">{t('login.heroText')}</p>
         </div>
 
-        <div className="flex flex-col justify-center bg-white px-8 py-12">
+        <div className="flex flex-col justify-center bg-white px-8 py-12 dark:bg-navy-800">
           <LoginForm onSuccess={() => navigate('/dashboard')} />
         </div>
       </div>

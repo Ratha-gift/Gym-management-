@@ -21,15 +21,15 @@ export default function ToastContainer() {
         return (
           <div
             key={toast.id}
-            className="animate-toast-in pointer-events-auto relative flex w-full max-w-sm items-start gap-3 overflow-hidden rounded-xl bg-white py-3 pl-4 pr-3 shadow-2xl ring-1 ring-black/5"
+            className="animate-toast-in pointer-events-auto relative flex w-full max-w-sm items-start gap-3 overflow-hidden rounded-xl bg-white py-3 pl-4 pr-3 shadow-2xl ring-1 ring-black/5 dark:bg-navy-800 dark:ring-white/10"
           >
             <span className={`absolute inset-y-0 left-0 w-1 ${barClass}`} />
             <Icon className={`h-5 w-5 shrink-0 ${iconClass}`} />
-            <p className="min-w-0 flex-1 pt-0.5 text-sm text-gray-700">{toast.message}</p>
+            <p className="min-w-0 flex-1 pt-0.5 text-sm text-gray-700 dark:text-gray-200">{toast.message}</p>
             <button
               type="button"
               onClick={() => dismiss(toast.id)}
-              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-gray-300 transition hover:bg-gray-100 hover:text-gray-500 active:scale-90"
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-gray-300 transition hover:bg-gray-100 hover:text-gray-500 active:scale-90 dark:text-gray-500 dark:hover:bg-white/5 dark:hover:text-gray-300"
               aria-label="Dismiss"
             >
               <X className="h-3.5 w-3.5" />

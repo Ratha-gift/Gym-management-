@@ -43,29 +43,29 @@ export default function MemberViewModal({
       <div className="flex items-center gap-4">
         <Avatar name={member.name} size={56} />
         <div>
-          <p className="text-lg font-bold text-gray-900">{member.name}</p>
-          <p className="text-sm text-gray-400">
+          <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{member.name}</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500">
             {member.member_code} &middot; {member.phone ?? '—'} &middot; {member.email ?? '—'}
           </p>
         </div>
         <Badge status={member.membership_status} />
       </div>
 
-      {isLoading && <p className="mt-6 text-sm text-gray-400">{t('members.loadingHistory')}</p>}
+      {isLoading && <p className="mt-6 text-sm text-gray-400 dark:text-gray-500">{t('members.loadingHistory')}</p>}
 
       {detail && (
         <div className="mt-6 space-y-6">
           <section>
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">{t('members.memberships')}</h4>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{t('members.memberships')}</h4>
             {detail.memberships.length === 0 ? (
-              <p className="text-sm text-gray-400">{t('members.noMembershipHistory')}</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500">{t('members.noMembershipHistory')}</p>
             ) : (
               <ul className="space-y-2">
                 {detail.memberships.map((m) => (
-                  <li key={m.membership_id} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm">
-                    <span className="font-medium text-gray-700">{m.package?.package_name ?? `Package #${m.package_id}`}</span>
-                    <span className="text-gray-400">
-                      {new Date(m.start_date).toLocaleDateString()} → {new Date(m.end_date).toLocaleDateString()}
+                  <li key={m.membership_id} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm dark:bg-white/5">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">{m.package?.package_name ?? `Package #${m.package_id}`}</span>
+                    <span className="text-gray-400 dark:text-gray-500">
+                      {new Date(m.start_date).toLocaleString()} → {new Date(m.end_date).toLocaleString()}
                     </span>
                     <Badge status={m.status} />
                   </li>
@@ -75,16 +75,16 @@ export default function MemberViewModal({
           </section>
 
           <section>
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">{t('members.payments')}</h4>
+            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">{t('members.payments')}</h4>
             {detail.payments.length === 0 ? (
-              <p className="text-sm text-gray-400">{t('members.noPaymentsYet')}</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500">{t('members.noPaymentsYet')}</p>
             ) : (
               <ul className="space-y-2">
                 {detail.payments.map((p) => (
-                  <li key={p.payment_id} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm">
-                    <span className="text-gray-400">{new Date(p.payment_date).toLocaleDateString()}</span>
-                    <span className="font-medium text-gray-700">{p.payment_method}</span>
-                    <span className="font-semibold text-gray-900">${Number(p.net_amount).toFixed(2)}</span>
+                  <li key={p.payment_id} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm dark:bg-white/5">
+                    <span className="text-gray-400 dark:text-gray-500">{new Date(p.payment_date).toLocaleDateString()}</span>
+                    <span className="font-medium text-gray-700 dark:text-gray-300">{p.payment_method}</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">${Number(p.net_amount).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>

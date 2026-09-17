@@ -121,7 +121,7 @@ export default function EditProfileModal({ open, onClose }: { open: boolean; onC
   return (
     <Modal open={open} onClose={onClose} title={t('profile.title')}>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10">{error}</p>}
 
         <div className="flex items-center gap-4">
           <div className="relative">
@@ -149,7 +149,7 @@ export default function EditProfileModal({ open, onClose }: { open: boolean; onC
               <button
                 type="button"
                 onClick={() => setPhoto(null)}
-                className="ml-3 inline-flex items-center gap-1 text-sm text-gray-400 transition hover:text-red-500 active:scale-95"
+                className="ml-3 inline-flex items-center gap-1 text-sm text-gray-400 transition hover:text-red-500 active:scale-95 dark:text-gray-500"
               >
                 <X className="h-3.5 w-3.5" />
                 {t('profile.removePhoto')}
@@ -175,8 +175,8 @@ export default function EditProfileModal({ open, onClose }: { open: boolean; onC
           <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
         </Field>
 
-        <div className="border-t border-gray-100 pt-4">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">{t('profile.changePassword')}</p>
+        <div className="border-t border-gray-100 pt-4 dark:border-navy-700">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">{t('profile.changePassword')}</p>
 
           <div className="space-y-4">
             <Field label={t('password.current')}>
@@ -199,7 +199,7 @@ export default function EditProfileModal({ open, onClose }: { open: boolean; onC
                     <button
                       type="button"
                       onClick={() => setShowPasswords((v) => !v)}
-                      className="text-gray-400 transition hover:text-gray-600 active:scale-90"
+                      className="text-gray-400 transition hover:text-gray-600 active:scale-90 dark:text-gray-500 dark:hover:text-gray-300"
                       tabIndex={-1}
                     >
                       {showPasswords ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

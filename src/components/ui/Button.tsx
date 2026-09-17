@@ -6,9 +6,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANTS: Record<NonNullable<ButtonProps['variant']>, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-600/30',
-  outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50',
-  ghost: 'text-gray-500 hover:bg-gray-100',
+  primary: 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm shadow-brand-600/30 dark:shadow-none',
+  outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-navy-700 dark:text-gray-300 dark:hover:bg-white/5',
+  ghost: 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5',
 }
 
 export default function Button({

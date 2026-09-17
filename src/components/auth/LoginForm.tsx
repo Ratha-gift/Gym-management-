@@ -37,11 +37,11 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <h2 className="text-2xl font-bold text-gray-900">{t('login.welcomeBack')}</h2>
-      <p className="mt-1 text-sm text-gray-400">{t('login.signInSubtitle')}</p>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('login.welcomeBack')}</h2>
+      <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">{t('login.signInSubtitle')}</p>
 
       {error && (
-        <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600" role="alert">
+        <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10" role="alert">
           {error}
         </p>
       )}
@@ -68,7 +68,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="text-gray-400 transition hover:text-gray-600 active:scale-90"
+              className="text-gray-400 transition hover:text-gray-600 active:scale-90 dark:text-gray-500 dark:hover:text-gray-300"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -78,12 +78,12 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
       </div>
 
       <div className="mt-4 flex items-center justify-between text-sm">
-        <label className="flex items-center gap-2 text-gray-500">
+        <label className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
           <input
             type="checkbox"
             checked={rememberMe}
             onChange={(event) => setRememberMe(event.target.checked)}
-            className="h-4 w-4 rounded border-gray-300 accent-brand-600"
+            className="h-4 w-4 rounded border-gray-300 accent-brand-600 dark:border-navy-700"
           />
           {t('login.rememberMe')}
         </label>

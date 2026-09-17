@@ -11,7 +11,9 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export default function Card({ className = '', flat = false, ...props }: CardProps) {
   return (
     <div
-      className={`bg-white ${flat ? 'rounded-lg' : 'rounded-2xl border border-gray-100 shadow-sm shadow-gray-200/60'} ${className}`}
+      className={`bg-white transition-colors dark:bg-navy-800 ${
+        flat ? 'rounded-lg' : 'rounded-2xl border border-gray-100 shadow-sm shadow-gray-200/60 dark:border-navy-700 dark:shadow-none'
+      } ${className}`}
       {...props}
     />
   )

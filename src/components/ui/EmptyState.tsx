@@ -41,7 +41,7 @@ export default function EmptyState({ message, width = 100, height = 100, classNa
           </g>
         </g>
       </svg>
-      <p className="text-sm font-medium text-gray-400">{message ?? t('common.noData')}</p>
+      <p className="text-sm font-medium text-gray-400 dark:text-gray-500">{message ?? t('common.noData')}</p>
     </div>
   )
 }

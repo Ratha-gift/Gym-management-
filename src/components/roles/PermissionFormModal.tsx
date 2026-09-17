@@ -55,7 +55,7 @@ export default function PermissionFormModal({ open, permission, modules, onClose
   return (
     <Modal open={open} onClose={onClose} title={permission ? t('roles.editPermission') : t('roles.addPermission')} size="sm">
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-500/10">{error}</p>}
 
         <Field label={t('roles.permissionName')}>
           <Input value={permissionName} onChange={(e) => setPermissionName(e.target.value)} required />

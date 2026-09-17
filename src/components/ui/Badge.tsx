@@ -2,11 +2,11 @@ import { useTranslation } from 'react-i18next'
 import type { MembershipStatus } from '@/types/member'
 
 const STYLES: Record<MembershipStatus, string> = {
-  active: 'bg-emerald-50 text-emerald-600',
-  frozen: 'bg-sky-50 text-sky-600',
-  expired: 'bg-amber-50 text-amber-600',
-  terminated: 'bg-red-50 text-red-600',
-  none: 'bg-gray-100 text-gray-500',
+  active: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
+  frozen: 'bg-sky-50 text-sky-600 dark:bg-sky-500/10 dark:text-sky-400',
+  expired: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
+  terminated: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
+  none: 'bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-gray-400',
 }
 
 const DOT: Record<MembershipStatus, string> = {

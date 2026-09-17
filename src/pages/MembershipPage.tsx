@@ -88,7 +88,7 @@ export default function MembershipPage() {
       render: (m) => (
         <div className="flex min-w-0 items-center gap-3">
           <Avatar name={m.member?.name ?? '—'} size={32} />
-          <span className="truncate font-medium text-gray-800" title={m.member?.name ?? `Member #${m.member_id}`}>
+          <span className="truncate font-medium text-gray-800 dark:text-gray-200" title={m.member?.name ?? `Member #${m.member_id}`}>
             {m.member?.name ?? `Member #${m.member_id}`}
           </span>
         </div>
@@ -97,17 +97,17 @@ export default function MembershipPage() {
     {
       header: t('membership.package'),
       width: 160,
-      render: (m) => <span className="text-gray-600">{m.package?.package_name ?? '—'}</span>,
+      render: (m) => <span className="text-gray-600 dark:text-gray-400">{m.package?.package_name ?? '—'}</span>,
     },
     {
       header: t('membership.start'),
       width: 130,
-      render: (m) => <span className="text-gray-500">{formatDate(m.start_date)}</span>,
+      render: (m) => <span className="text-gray-500 dark:text-gray-400">{formatDate(m.start_date)}</span>,
     },
     {
       header: t('membership.end'),
       width: 130,
-      render: (m) => <span className="text-gray-500">{formatDate(m.end_date)}</span>,
+      render: (m) => <span className="text-gray-500 dark:text-gray-400">{formatDate(m.end_date)}</span>,
     },
     {
       header: t('common.status'),
@@ -135,7 +135,7 @@ export default function MembershipPage() {
 
   return (
     <div className="flex h-full flex-col gap-6">
-      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600">{error}</Card>}
+      {error && <Card className="shrink-0 border-red-100 bg-red-50 p-4 text-sm text-red-600 dark:border-red-500/20 dark:bg-red-500/10">{error}</Card>}
 
       <ListPageTemplate
         fillContent
