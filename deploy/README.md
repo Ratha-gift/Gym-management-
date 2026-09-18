@@ -12,7 +12,7 @@ git clone https://github.com/Ratha-gift/Gym-management-.git
 cd Gym-management-/deploy
 chmod +x server-setup.sh deploy.sh
 
-sudo ./server-setup.sh   # installs nginx, PHP 8.2, MariaDB, Node, Composer,
+sudo ./server-setup.sh   # installs nginx, PHP 8.4, MariaDB, Node, Composer,
                           # creates the app database + user, adds swap
 sudo ./deploy.sh         # clones+builds both repos, writes .env files,
                           # runs migrations, wires up nginx

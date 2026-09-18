@@ -32,7 +32,7 @@ FRONTEND_DIR="/var/www/gym-frontend"
 BACKEND_DIR="/var/www/gym-backend"
 
 if command -v apt-get >/dev/null 2>&1; then
-  WEB_USER=www-data; WEB_GROUP=www-data; PHP_FPM_SOCK="/run/php/php8.2-fpm.sock"
+  WEB_USER=www-data; WEB_GROUP=www-data; PHP_FPM_SOCK="/run/php/php8.4-fpm.sock"
 elif command -v dnf >/dev/null 2>&1; then
   WEB_USER=nginx; WEB_GROUP=nginx; PHP_FPM_SOCK="/run/php-fpm/www.sock"
 else
@@ -68,7 +68,14 @@ clone_or_pull "$FRONTEND_REPO" "$FRONTEND_DIR"
 # ---------------------------------------------------------------------------
 echo "==> Backend: composer install"
 cd "$BACKEND_DIR"
-composer install --no-dev --optimize-autoloader --no-interaction
+# Invoke composer via php8.4 explicitly rather than the bare `composer`
+# command — composer.lock has transitive deps (symfony/css-selector, a
+# Laravel Mail dependency) that require PHP >=8.4.1, and on a box with more
+# than one PHP version installed, plain `composer` can resolve through
+# whichever `php` happens to come first on PATH. Explicit avoids that
+# ambiguity regardless of PATH order.
+php8.4 "$(command -v composer)" install --no-dev --optimize-autoloader --no-interaction
+PHP=php8.4   # same reasoning below: pin artisan to 8.4 too, not just composer
 
 if [ ! -f .env ]; then
   echo "==> Backend: creating .env from template"
@@ -84,18 +91,18 @@ if [ ! -f .env ]; then
     "$SCRIPT_DIR/backend.env.production.example" > .env
 fi
 
-php artisan key:generate --force
+$PHP artisan key:generate --force
 # Only generate a JWT secret the first time — running this on every deploy
 # would rotate it and invalidate every already-issued login token.
 if ! grep -q "^JWT_SECRET=.\+" .env; then
-  php artisan jwt:secret --force
+  $PHP artisan jwt:secret --force
 fi
 
-php artisan migrate --force
-php artisan storage:link || true
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+$PHP artisan migrate --force
+$PHP artisan storage:link || true
+$PHP artisan config:cache
+$PHP artisan route:cache
+$PHP artisan view:cache
 
 chown -R "${WEB_USER}:${WEB_GROUP}" "$BACKEND_DIR"
 chmod -R 775 "$BACKEND_DIR/storage" "$BACKEND_DIR/bootstrap/cache"

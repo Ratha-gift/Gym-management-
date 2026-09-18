@@ -46,15 +46,15 @@ if command -v apt-get >/dev/null 2>&1; then
   export DEBIAN_FRONTEND=noninteractive
   apt-get update -y
   apt-get install -y software-properties-common curl git unzip nginx mariadb-server \
-    php8.2 php8.2-fpm php8.2-cli php8.2-mysql php8.2-mbstring php8.2-xml \
-    php8.2-curl php8.2-zip php8.2-gd php8.2-bcmath || {
-      # Ubuntu 22.04's default repo may not have php8.2 — add ondrej PPA and retry
+    php8.4 php8.4-fpm php8.4-cli php8.4-mysql php8.4-mbstring php8.4-xml \
+    php8.4-curl php8.4-zip php8.4-gd php8.4-bcmath || {
+      # Ubuntu 22.04's default repo may not have php8.4 — add ondrej PPA and retry
       add-apt-repository -y ppa:ondrej/php
       apt-get update -y
-      apt-get install -y php8.2 php8.2-fpm php8.2-cli php8.2-mysql php8.2-mbstring \
-        php8.2-xml php8.2-curl php8.2-zip php8.2-gd php8.2-bcmath
+      apt-get install -y php8.4 php8.4-fpm php8.4-cli php8.4-mysql php8.4-mbstring \
+        php8.4-xml php8.4-curl php8.4-zip php8.4-gd php8.4-bcmath
     }
-  PHP_FPM_SERVICE=php8.2-fpm
+  PHP_FPM_SERVICE=php8.4-fpm
   WEB_USER=www-data
   WEB_GROUP=www-data
 
@@ -66,8 +66,8 @@ elif command -v dnf >/dev/null 2>&1; then
   echo "==> Detected Amazon Linux (dnf)"
   dnf update -y
   dnf install -y git unzip nginx mariadb1011-server \
-    php8.2 php8.2-fpm php8.2-cli php8.2-mysqlnd php8.2-mbstring php8.2-xml \
-    php8.2-curl php8.2-zip php8.2-gd php8.2-bcmath nodejs20
+    php8.4 php8.4-fpm php8.4-cli php8.4-mysqlnd php8.4-mbstring php8.4-xml \
+    php8.4-curl php8.4-zip php8.4-gd php8.4-bcmath nodejs20
   PHP_FPM_SERVICE=php-fpm
   WEB_USER=nginx
   WEB_GROUP=nginx
