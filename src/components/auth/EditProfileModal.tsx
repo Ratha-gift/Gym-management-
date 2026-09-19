@@ -70,7 +70,12 @@ export default function EditProfileModal({ open, onClose }: { open: boolean; onC
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
 
-    const wantsPasswordChange = currentPassword || newPassword || newPasswordConfirmation
+    // Intent to change the password is signalled by the NEW password fields
+    // only — the current-password field alone doesn't count, since browsers
+    // autofill it with the saved login password (autoComplete="current-
+    // password") the moment the modal opens, which used to make a plain
+    // name/photo edit fail with "fill in all three password fields".
+    const wantsPasswordChange = newPassword || newPasswordConfirmation
     if (wantsPasswordChange && (!currentPassword || !newPassword || !newPasswordConfirmation)) {
       setError('Fill in all three password fields to change your password.')
       return
